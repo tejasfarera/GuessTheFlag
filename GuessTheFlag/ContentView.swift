@@ -1,16 +1,60 @@
-//
-//  ContentView.swift
-//  GuessTheFlag
-//
-//  Created by rails on 08/02/21.
-//
-
 import SwiftUI
 
 struct ContentView: View {
+    @State private var countryNameIndex = Int.random(in: 0...3)
+    @State private var shouldShowAlert = false
+    @State private var isAnswerCorrect = true
+    
+    @State var countries = ["Estonia", "France", "Germany", "Ireland", "Italy", "Nigeria", "Poland", "Russia", "Spain", "UK", "US"].shuffled()
+    
     var body: some View {
-        Text("Hello, world!")
-            .padding()
+        ZStack {
+            LinearGradient(gradient: Gradient(
+                            colors: [Color.white, Color.black]),
+                           startPoint: .top,
+                           endPoint: .bottom)
+                .edgesIgnoringSafeArea(.all)
+            
+            VStack(alignment: .center, spacing: 80) {
+                VStack(alignment: .center, spacing: 20) {
+                    Text("Select the flag of name...")
+                    Text(countries[countryNameIndex])
+                        .font(.largeTitle)
+                        .bold()
+                }
+                
+                VStack (alignment: .center, spacing: 30) {
+                    ForEach(0..<3) { index in
+                        Button(action: {
+                            onFlagClick(imageName: countries[index])
+                        }, label: {
+                            Image(countries[index])
+                                .renderingMode(.original)
+                        })
+                        .alert(isPresented: $shouldShowAlert, content: {
+                            Alert(
+                                title: Text("Result"),
+                                message: Text("The answer is \(isAnswerCorrect.description)"),
+                                primaryButton: Alert.Button.cancel(),
+                                secondaryButton: Alert.Button.default(
+                                    Text(isAnswerCorrect ? "Continue" : "Retry")
+                                )
+                                {
+                                    self.countries.shuffle()
+                                })
+                        })
+                    }
+                }
+                
+                Spacer()
+            }
+            
+        }
+    }
+    
+    private func onFlagClick(imageName: String) {
+        shouldShowAlert = true
+        isAnswerCorrect = imageName == countries[countryNameIndex]
     }
 }
 
