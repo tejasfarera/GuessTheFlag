@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var countryNameIndex = Int.random(in: 0...3)
+    @State private var countryNameIndex = Int.random(in: 0...2)
     @State private var shouldShowAlert = false
     @State private var isAnswerCorrect = true
     
@@ -16,7 +16,7 @@ struct ContentView: View {
                 .edgesIgnoringSafeArea(.all)
             
             VStack(alignment: .center, spacing: 80) {
-                VStack(alignment: .center, spacing: 20) {
+                VStack(alignment: .center, spacing: 10) {
                     Text("Select the flag of name...")
                     Text(countries[countryNameIndex])
                         .font(.largeTitle)
@@ -30,6 +30,9 @@ struct ContentView: View {
                         }, label: {
                             Image(countries[index])
                                 .renderingMode(.original)
+                                .clipShape(Capsule())
+                                .overlay(Capsule().stroke(Color.black, lineWidth: 2))
+                                .shadow(radius: 20)
                         })
                         .alert(isPresented: $shouldShowAlert, content: {
                             Alert(
@@ -41,6 +44,7 @@ struct ContentView: View {
                                 )
                                 {
                                     self.countries.shuffle()
+                                    self.countryNameIndex = Int.random(in: 0...2)
                                 })
                         })
                     }
