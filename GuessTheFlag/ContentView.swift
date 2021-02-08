@@ -1,5 +1,18 @@
 import SwiftUI
 
+
+// Usage of custom View for image for a cleaner approach
+struct FlagImage: View {
+    var imageName: String
+    var body: some View {
+        Image(imageName)
+            .renderingMode(.original)
+            .clipShape(Capsule())
+            .overlay(Capsule().stroke(Color.black, lineWidth: 2))
+            .shadow(radius: 20)
+    }
+}
+
 struct ContentView: View {
     @State private var countryNameIndex = Int.random(in: 0...2)
     @State private var shouldShowAlert = false
@@ -28,11 +41,7 @@ struct ContentView: View {
                         Button(action: {
                             onFlagClick(imageName: countries[index])
                         }, label: {
-                            Image(countries[index])
-                                .renderingMode(.original)
-                                .clipShape(Capsule())
-                                .overlay(Capsule().stroke(Color.black, lineWidth: 2))
-                                .shadow(radius: 20)
+                            FlagImage(imageName: countries[index])
                         })
                         .alert(isPresented: $shouldShowAlert, content: {
                             Alert(
