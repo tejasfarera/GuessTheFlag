@@ -30,8 +30,8 @@ struct ContentView: View {
             
             VStack(alignment: .center, spacing: 80) {
                 VStack(alignment: .center, spacing: 10) {
-                    Text("Select the flag of name...")
-                    Text(countries[countryNameIndex])
+                    Text("select_flag".customLocalization)
+                    Text(countries[countryNameIndex].customLocalization)
                         .font(.largeTitle)
                         .bold()
                 }
@@ -45,11 +45,11 @@ struct ContentView: View {
                         })
                         .alert(isPresented: $shouldShowAlert, content: {
                             Alert(
-                                title: Text("Result"),
-                                message: Text("The answer is \(isAnswerCorrect.description)"),
+                                title: Text("result".customLocalization),
+                                message: Text("the_answer".customLocalization + "\(isAnswerCorrect.description)"),
                                 primaryButton: Alert.Button.cancel(),
                                 secondaryButton: Alert.Button.default(
-                                    Text(isAnswerCorrect ? "Continue" : "Retry")
+                                    Text(isAnswerCorrect ? "continue".customLocalization : "retry".customLocalization)
                                 )
                                 {
                                     self.countries.shuffle()
@@ -74,5 +74,11 @@ struct ContentView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
+    }
+}
+
+extension String {
+    var customLocalization: String {
+        return NSLocalizedString(self, comment: "").isEmpty ? self : NSLocalizedString(self, comment: "")
     }
 }
